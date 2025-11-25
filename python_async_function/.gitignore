@@ -1,2 +1,4 @@
 async-venv/
 *main.py
+*.sh
+__pycache__
