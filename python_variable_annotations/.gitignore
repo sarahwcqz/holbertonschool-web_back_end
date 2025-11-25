@@ -1,0 +1,4 @@
+var-annot-venv/
+*main.py
+__pycache__
+*.sh
