@@ -1,0 +1,3 @@
+*.sh
+async-comp-venv/
+*main.py
