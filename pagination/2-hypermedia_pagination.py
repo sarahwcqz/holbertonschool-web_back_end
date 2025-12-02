@@ -13,6 +13,7 @@ def index_range(page: int, page_size: int) -> tuple[int, int]:
 
     return (start_index, end_index)
 
+
 class Server:
     """Server class to paginate a database of popular baby names.
     """
@@ -33,48 +34,48 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-            """Get pages of popular baby names from dataset
-            """
-            assert type(page) == int
-            assert type(page_size) == int
-            assert page > 0
-            assert page_size > 0
+        """Get pages of popular baby names from dataset
+        """
+        assert isinstance(page, int) & page > 0
+        assert isinstance(page_size, int) & page_size > 0
 
-            start_index, end_index = index_range(page, page_size)
-            if ((len(self.dataset()) < start_index) or
-                    (len(self.dataset()) < end_index)):
-                return []
+        start_index, end_index = index_range(page, page_size)
+        if ((len(self.dataset()) < start_index) or
+                (len(self.dataset()) < end_index)):
+            return []
 
-            paginated_names = []
-            for i in range(start_index, end_index):
-                paginated_names.append(self.dataset()[i])
+        paginated_names = []
+        for i in range(start_index, end_index):
+            paginated_names.append(self.dataset()[i])
 
-            return paginated_names
+        return paginated_names
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Union[int, List[List], Optional[int]]]:
-            """Returns a dictionary of hypermedia key-value pairs"""
+    def get_hyper(
+            self, page: int = 1, page_size: int = 10
+            ) -> Dict[str, Union[int, List[List], Optional[int]]]:
+        """Returns a dictionary of hypermedia key-value pairs"""
 
-            start_index, end_index = index_range(page, page_size)
+        start_index, end_index = index_range(page, page_size)
 
-            prev_page = None
-            if (page > 1):
-                prev_page = page - 1
+        prev_page = None
+        if (page > 1):
+            prev_page = page - 1
 
-            next_page = None
-            if (len(self.dataset()) > end_index):
-                next_page = page + 1
+        next_page = None
+        if (len(self.dataset()) > end_index):
+            next_page = page + 1
 
-            total_pages = int(len(self.dataset()) / 10)
-            if (page_size > 0):
-                total_pages = int(len(self.dataset()) / page_size)
+        total_pages = int(len(self.dataset()) / 10)
+        if (page_size > 0):
+            total_pages = int(len(self.dataset()) / page_size)
 
-            hyper_dict = {
-                "page_size": len(self.get_page(page, page_size)),
-                "page": page,
-                "data": self.get_page(page, page_size),
-                "next_page": next_page,
-                "prev_page": prev_page,
-                "total_pages": total_pages
-            }
+        hyper_dict = {
+            "page_size": len(self.get_page(page, page_size)),
+            "page": page,
+            "data": self.get_page(page, page_size),
+            "next_page": next_page,
+            "prev_page": prev_page,
+            "total_pages": total_pages
+        }
 
-            return hyper_dict
+        return hyper_dict
