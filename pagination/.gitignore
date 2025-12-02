@@ -1,2 +1,4 @@
 pag-venv/
 *main.py
+*.csv
+*.sh
