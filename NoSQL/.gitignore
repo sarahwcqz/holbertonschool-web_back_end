@@ -1,2 +1,4 @@
 *.sh
 NoSQL-venv/
+*main.py
+__pycache__
