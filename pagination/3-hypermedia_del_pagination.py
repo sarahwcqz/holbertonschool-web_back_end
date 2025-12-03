@@ -42,8 +42,8 @@ class Server:
     def get_hyper_index(
             self, index: int = None, page_size: int = 10
             ) -> Dict[str, Union[int, List[Any]]]:
-        assert isinstance(index, int) & index >= 0
-        assert isinstance(page_size, int) & index < len(self.indexed_dataset())
+        assert isinstance(index, int) and index >= 0
+        assert isinstance(page_size, int) and index < len(self.indexed_dataset())
 
         csv = self.indexed_dataset()
         data = []
