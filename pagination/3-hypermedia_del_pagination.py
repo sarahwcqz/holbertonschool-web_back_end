@@ -44,7 +44,8 @@ class Server:
             ) -> Dict[str, Union[int, List[Any]]]:
         """returns a dictionary with key-value pairs containing page's info"""
         assert isinstance(index, int) and index >= 0
-        assert isinstance(page_size, int) and index < len(self.indexed_dataset())
+        assert isinstance(page_size, int) and \
+            index < len(self.indexed_dataset())
 
         csv = self.indexed_dataset()
         data = []
