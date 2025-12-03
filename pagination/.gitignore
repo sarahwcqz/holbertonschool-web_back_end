@@ -2,3 +2,4 @@ pag-venv/
 *main.py
 *.csv
 *.sh
+__pycache__
