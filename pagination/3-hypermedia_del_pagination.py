@@ -42,6 +42,7 @@ class Server:
     def get_hyper_index(
             self, index: int = None, page_size: int = 10
             ) -> Dict[str, Union[int, List[Any]]]:
+        """returns a dictionary with key-value pairs containing page's info"""
         assert isinstance(index, int) and index >= 0
         assert isinstance(page_size, int) and index < len(self.indexed_dataset())
 
@@ -59,6 +60,6 @@ class Server:
         return {
             "index": index,
             "data": data,
-            "page_size": page_size,
+            "page_size": len(data),
             "next_index": next_index
             }
