@@ -2,3 +2,4 @@
 NoSQL-venv/
 *main.py
 __pycache__
+dump/
