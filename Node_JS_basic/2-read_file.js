@@ -16,12 +16,15 @@ function countStudents(path) {
 
         students.forEach(line => {
         const [firstname, lastname, age, field] = line.split(',');
+        // if field not already in fields
         if (!fields[field]) {
             fields[field] = [];
         }
+        // adding name to field
         fields[field].push(firstname);
         });
 
+        //display msg for each field
         for (const field in fields) {
         const list = fields[field];
         console.log(`Number of students in ${field}: ${list.length}. List: ${list.join(', ')}`);
