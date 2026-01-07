@@ -20,13 +20,13 @@ app.get('/students', (req, res) => {
     }
 
     const lines = data.trim().split('\n');
-    const students = lines.slice(1).filter(line => line.trim() !== '');
+    const students = lines.slice(1).filter((line) => line.trim() !== '');
 
     res.write(`Number of students: ${students.length}\n`);
 
     const fields = {};
 
-    students.forEach(line => {
+    students.forEach((line) => {
       const [firstname, , , field] = line.split(',');
       if (!fields[field]) fields[field] = [];
       fields[field].push(firstname);
@@ -40,7 +40,6 @@ app.get('/students', (req, res) => {
     res.end();
   });
 });
-
 
 app.listen(1245);
 
