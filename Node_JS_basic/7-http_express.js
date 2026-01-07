@@ -1,11 +1,11 @@
-const express = require('express')
+const express = require('express');
 const fs = require('fs');
 
-const app = express()
+const app = express();
 
 app.get('/', (req, res) => {
-    res.send('Hello Holberton School!');
-})
+  res.send('Hello Holberton School!');
+});
 
 app.get('/students', (req, res) => {
   const dbFile = process.argv[2];
@@ -19,12 +19,12 @@ app.get('/students', (req, res) => {
     }
 
     const lines = data.trim().split('\n');
-    const students = lines.slice(1).filter(line => line.trim() !== '');
+    const students = lines.slice(1).filter((line) => line.trim() !== '');
     output += `Number of students: ${students.length}\n`;
 
     const fields = {};
 
-    students.forEach(line => {
+    students.forEach((line) => {
       const [firstname, , , field] = line.split(',');
       if (!fields[field]) fields[field] = [];
       fields[field].push(firstname);
@@ -42,7 +42,6 @@ app.get('/students', (req, res) => {
   });
 });
 
-
 app.listen(1245);
 
-module.exports = app
+module.exports = app;
