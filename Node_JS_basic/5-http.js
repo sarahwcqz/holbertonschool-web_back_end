@@ -19,7 +19,7 @@ const app = http.createServer((request, response) => {
 
             const lines = data.trim().split('\n');
             const numberOfStudents = lines.length - 1;
-            response.write(`Number of students: ${numberOfStudents}`);
+            response.write(`Number of students: ${numberOfStudents}\n`);
 
             // all students + removing header (ie first line)
             const students = lines.slice(1);
