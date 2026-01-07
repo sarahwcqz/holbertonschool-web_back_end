@@ -5,3 +5,4 @@ database.csv
 package.json
 babel.config.js
 .eslintrc.js
+package-lock.json
