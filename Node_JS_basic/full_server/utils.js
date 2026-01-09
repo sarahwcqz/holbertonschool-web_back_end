@@ -1,24 +1,23 @@
 import fs from 'node:fs/promises';
 
 async function readDatabase(path) {
-    try {
-        const data = await fs.readFile(path, 'utf-8');
-        
-        const lines = data.trim().split('\n').slice(1);
-        const fields = {};
+  try {
+    const data = await fs.readFile(path, 'utf-8');
 
-        lines.forEach((line) =>{
-            const [firstname, , , field] = line.split(',');
+    const lines = data.trim().split('\n').slice(1);
+    const fields = {};
 
-            if (!fields[field]) fields[field] = [];
+    lines.forEach((line) => {
+      const [firstname, , , field] = line.split(',');
 
-            fields[field].push(firstname);
-        });
-        return fields;
+      if (!fields[field]) fields[field] = [];
 
-    } catch (err) {
-        throw err;
-    }
+      fields[field].push(firstname);
+    });
+    return fields;
+  } catch (err) {
+    throw err;
+  }
 }
 
 export default readDatabase;
