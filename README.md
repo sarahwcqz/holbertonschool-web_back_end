@@ -8,6 +8,9 @@ This repository contains projects and exercises for the **third trimester** of H
 - Variable annotations and type hints  
 - Pagination techniques  
 - Asynchronous programming (`async/await`)
+- Logging
+- Hashing
+- Env variables
 
 ### NoSQL
 - Basic operations and data modeling
