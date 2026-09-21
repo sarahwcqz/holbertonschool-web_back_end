@@ -58,9 +58,24 @@ class RedactingFormatter(logging.Formatter):
         return filter_datum(self.fields, self.REDACTION, log_msg,
                             self.SEPARATOR)
 
+
 def get_logger() -> logging.Logger:
+    """Return the "user_data" logger, ready to record events without
+    exposing personal information.
+
+    The logger reports events from INFO upwards on a stream handler whose
+    formatter obfuscates the values of the PII_FIELDS fields, and it keeps
+    its records to itself so that no ancestor logger can emit them
+    unredacted.
+
+    Returns:
+        The configured "user_data" logger.
+    """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     handler = logging.StreamHandler()
-    handler.setFormatter(RedactingFormatter)
+    formatter = RedactingFormatter(PII_FIELDS)
+    handler.setFormatter(formatter)
     logger.addHandler(handler)
+    logger.propagate = False
+    return logger
