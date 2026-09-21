@@ -4,6 +4,7 @@ fields inside a log line before it gets written anywhere."""
 
 import re
 from typing import List
+import logging
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
@@ -22,3 +23,35 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     """
     pattern = rf"({'|'.join(fields)})=[^{separator}]*"
     return re.sub(pattern, rf"\1={redaction}", message)
+
+
+class RedactingFormatter(logging.Formatter):
+    """Logging formatter that hides the values of sensitive fields in the
+    lines it produces."""
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]):
+        """Set up the formatter with the fields whose values must be hidden.
+
+        Args:
+            fields: names of the fields to obfuscate in every record.
+        """
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Return the record rendered with FORMAT, with the value of every
+        field listed in fields replaced by REDACTION.
+
+        Args:
+            record: the log record to render.
+
+        Returns:
+            The formatted log line with its sensitive values obfuscated.
+        """
+        log_msg = super().format(record)
+        return filter_datum(self.fields, self.REDACTION, log_msg,
+                            self.SEPARATOR)
