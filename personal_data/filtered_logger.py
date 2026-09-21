@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""This module provides a helper to obfuscate the values of sensitive
-fields inside a log line before it gets written anywhere."""
+"""Tools to keep personal data out of the logs: a field obfuscator, a
+redacting formatter, and a database connection built from the environment."""
 
 import re
 from typing import List
 import logging
+import mysql.connector
+import os
+
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -60,16 +63,12 @@ class RedactingFormatter(logging.Formatter):
 
 
 def get_logger() -> logging.Logger:
-    """Return the "user_data" logger, ready to record events without
-    exposing personal information.
-
-    The logger reports events from INFO upwards on a stream handler whose
-    formatter obfuscates the values of the PII_FIELDS fields, and it keeps
-    its records to itself so that no ancestor logger can emit them
-    unredacted.
+    """Return the "user_data" logger, which keeps personal information out
+    of every record it emits.
 
     Returns:
-        The configured "user_data" logger.
+        A logger reporting INFO and above through a redacting formatter,
+        and never propagating to its ancestors.
     """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
@@ -79,3 +78,17 @@ def get_logger() -> logging.Logger:
     logger.addHandler(handler)
     logger.propagate = False
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Return a connection to the database holding the users table.
+    """
+    host_name = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME")
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    connection = mysql.connector.connect(host=host_name,
+                                         database=db_name,
+                                         user=username,
+                                         password=db_password)
+    return connection
