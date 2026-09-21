@@ -92,3 +92,22 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
                                          user=username,
                                          password=db_password)
     return connection
+
+
+def main() -> None:
+    """Log every row of the users table with its personal fields hidden."""
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    columns = cursor.column_names
+    for row in cursor:
+        message = "".join(f"{column}={value}; "
+                          for column, value in zip(columns, row))
+        logger.info(message)
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
