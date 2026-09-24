@@ -102,3 +102,19 @@ class BasicAuth(Auth):
             return users[0]
         except Exception:
             return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """Return the user the request authenticates as.
+
+        Args:
+            request: the Flask request carrying the Authorization header.
+
+        Returns:
+            The User the Basic credentials identify, or None if the header
+            is absent, malformed, or does not match any account.
+        """
+        header = self.authorization_header(request)
+        b64 = self.extract_base64_authorization_header(header)
+        decoded = self.decode_base64_authorization_header(b64)
+        mail, password = self.extract_user_credentials(decoded)
+        return self.user_object_from_credentials(mail, password)
