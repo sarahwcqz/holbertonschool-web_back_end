@@ -56,10 +56,11 @@ def author():
                                             '/api/v1/forbidden/',
                                             '/api/v1/auth_session/login/']):
         return
-    if auth.authorization_header(request) is None:
+
+    header = auth.authorization_header(request)
+    cookie = auth.session_cookie(request)
+    if header is None and cookie is None:
         abort(401)
-    if auth.session_cookie(request) is None:
-            abort(401)
     request.current_user = auth.current_user(request)
     if request.current_user is None:
         abort(403)
