@@ -1,0 +1,6 @@
+main*
+.session_venv/
+__pycache__/
+*.pyc
+.db_*.json
+.DS_Store
