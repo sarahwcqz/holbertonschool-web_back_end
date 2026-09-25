@@ -8,7 +8,6 @@ from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 
 
-
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
@@ -22,6 +21,7 @@ elif getenv("AUTH_TYPE") == "auth":
 elif getenv("AUTH_TYPE") == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
+
 
 @app.errorhandler(401)
 def unauthorized(error) -> str:
