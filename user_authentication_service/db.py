@@ -58,3 +58,22 @@ class DB:
             InvalidRequestError: when a key is not a column of users.
         """
         return self._session.query(User).filter_by(**kwargs).one()
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Change some attributes of the user with the given id.
+
+        Args:
+            user_id: the primary key of the user to update.
+            **kwargs: column names and the values to store in them.
+
+        Raises:
+            ValueError: when a key is not an attribute of User, in which
+                case nothing is changed at all.
+        """
+        user = self.find_user_by(id=user_id)
+        for key in kwargs:
+            if not hasattr(user, key):
+                raise ValueError("{} is not an attribute of User".format(key))
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+        self._session.commit()
