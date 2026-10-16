@@ -43,3 +43,18 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """Return the first user matching the given attributes.
+
+        Args:
+            **kwargs: column names and the values they must equal.
+
+        Returns:
+            The first matching User.
+
+        Raises:
+            NoResultFound: when no user matches.
+            InvalidRequestError: when a key is not a column of users.
+        """
+        return self._session.query(User).filter_by(**kwargs).one()
