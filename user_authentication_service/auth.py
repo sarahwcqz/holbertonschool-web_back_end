@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Authentication logic, sitting between the Flask app and the database."""
+import uuid
+
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -17,6 +19,15 @@ def _hash_password(password: str) -> bytes:
         The hash, salt included, as a byte string.
     """
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
+
+def _generate_uuid() -> str:
+    """Return a brand new UUID, as a string.
+
+    Returns:
+        A random identifier, used for session ids and reset tokens.
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
