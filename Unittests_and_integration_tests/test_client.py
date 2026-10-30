@@ -3,9 +3,10 @@
 
 import unittest
 from typing import Dict
-from unittest.mock import MagicMock, PropertyMock, patch
-from parameterized import parameterized
+from unittest.mock import MagicMock, Mock, PropertyMock, patch
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -62,3 +63,33 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(
             GithubOrgClient.has_license(repo, license_key), expected
         )
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Integration tests of GithubOrgClient with only requests.get mocked."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        """Patch requests.get so that each known URL answers its fixture."""
+        payloads = {
+            "https://api.github.com/orgs/google": cls.org_payload,
+            cls.org_payload["repos_url"]: cls.repos_payload,
+        }
+
+        def fake_get(url: str) -> Mock:
+            """Build a fake response whose json() returns the fixture."""
+            response = Mock()
+            response.json.return_value = payloads[url]
+            return response
+
+        cls.get_patcher = patch("requests.get", side_effect=fake_get)
+        cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Remove the requests.get patch once all the tests have run."""
+        cls.get_patcher.stop()
