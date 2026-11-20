@@ -31,7 +31,6 @@ class Cache:
         """Get a value from Redis and decode its bytes to a str."""
         return self.get(key, fn=lambda d: d.decode("utf-8"))
 
-    def get_int(self, key/ int) -> Optional[int]:
+    def get_int(self, key: int) -> Optional[int]:
         """Get a value from Redis and decode its bytes to an int."""
         return self.get(key, fn=int)
-    
